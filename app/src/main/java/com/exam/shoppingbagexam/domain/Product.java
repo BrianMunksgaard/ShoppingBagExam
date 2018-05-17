@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * The product class is used to represent an item
  * in a shopping bag.
  */
-public class Product implements Parcelable {
+public class Product {
 
     /*
      * Product name.
@@ -71,42 +71,4 @@ public class Product implements Parcelable {
         return name + " " + quantity​;
     }
 
-    /**
-     *
-     * @return
-     */
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    /**
-     * Write product data to parcel.
-     */
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeInt(quantity​);
-    }
-
-    /**
-     * CREATOR used by the Parcelable interface.
-     */
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Product createFromParcel(Parcel in) {
-            return new Product(in);
-        }
-
-        public Product[] newArray(int size) {
-            return new Product[size];
-        }
-    };
-
-    /*
-     * Create product from Parcel.
-     */
-    private Product(Parcel in) {
-        name = in.readString();
-        quantity​ = in.readInt();
-    }
 }

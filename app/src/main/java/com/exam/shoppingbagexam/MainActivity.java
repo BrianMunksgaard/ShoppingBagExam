@@ -1,5 +1,6 @@
 package com.exam.shoppingbagexam;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,14 +13,39 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import com.exam.shoppingbagexam.domain.Product;
+import com.exam.shoppingbagexam.fragment.YNDialog;
+import com.firebase.ui.database.FirebaseListAdapter;
 
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, YNDialog.OnPositiveListener, YNDialog.OnNegativeListener {
+
+    /*
+     * The current context (this).
+     */
+    private Context context;
+
+    /**
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = this;
+
+        FirebaseListAdapter<Product> adapter = new FirebaseListAdapter<Product>(options) {
+            @Override
+            protected void populateView(View v, Product product, int position) {
+                TextView textView = (TextView) v.findViewById( android.R.id . text1 );
+                textView.setTextSize( 24 ); //modify this if you want different size
+                textView.setText(product.toString());
+            }
+        };
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -97,5 +123,29 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Handle No/Negative clicks from the YNDialog.
+     */
+    @Override
+    public void onNegativeClicked() {
+        Toast toast = Toast.makeText(context,
+                "negative button clicked", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    /**
+     * Handle Yes/Positive clicks from the YNDialog.
+     */
+    @Override
+    public void onPositiveClicked() {
+
+        Toast toast = Toast.makeText(context,
+                "positive button clicked", Toast.LENGTH_LONG);
+        toast.show();
+
+        //mShoppingBagRef.removeValue();
+        //adapter.notifyDataSetChanged();
     }
 }

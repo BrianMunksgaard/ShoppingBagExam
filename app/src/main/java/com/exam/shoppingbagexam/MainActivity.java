@@ -16,17 +16,13 @@ import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.exam.shoppingbagexam.domain.Product;
 import com.exam.shoppingbagexam.domain.ShoppingBag;
-import com.exam.shoppingbagexam.fragment.YNDialog;
-import com.firebase.ui.database.FirebaseListAdapter;
+import com.exam.shoppingbagexam.utils.ConfirmationSnack;
+import com.exam.shoppingbagexam.utils.YNDialog;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -280,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Get the name of the product we are about to delete.
         final String productName = shoppingBag.getProduct(currentCheckedItem).getName();
 
+        /*
         // Hide the keyboard.
         final View parent = findViewById(R.id.layout);
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -309,6 +306,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         });
         snackbar.show();
+        */
+        View parent = findViewById(R.id.layout);
+        ConfirmationSnack cs = new ConfirmationSnack();
+        cs.setConfirmCallback(new ConfirmationSnack.OnConfirmationListener() {
+            @Override
+            public void onConfirmed() {
+                shoppingBag.removeItemFromBag(currentCheckedItem);
+            }
+        });
+        cs.showSnack(parent, "Really remove " + productName + "!", "Remove of " + productName + " cancelled!");
     }
 
     /**
@@ -329,5 +336,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         dialog.show(getFragmentManager(), "YNFragment");
+    }
+
+    /*
+     * Hide the keyboard.
+     */
+    private void hideKeyboard(View parentView) {
+        final View parent = parentView;
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(parent.getWindowToken(), 0);
     }
 }

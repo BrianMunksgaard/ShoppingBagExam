@@ -1,4 +1,4 @@
-package com.exam.shoppingbagexam.fragment;
+package com.exam.shoppingbagexam.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;

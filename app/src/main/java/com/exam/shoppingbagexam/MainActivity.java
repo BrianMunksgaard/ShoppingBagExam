@@ -36,16 +36,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         context = this;
 
-        FirebaseListAdapter<Product> adapter = new FirebaseListAdapter<Product>(options) {
-            @Override
-            protected void populateView(View v, Product product, int position) {
-                TextView textView = (TextView) v.findViewById( android.R.id . text1 );
-                textView.setTextSize( 24 ); //modify this if you want different size
-                textView.setText(product.toString());
-            }
-        };
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

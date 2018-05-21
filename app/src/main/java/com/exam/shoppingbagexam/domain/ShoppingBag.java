@@ -11,17 +11,29 @@ import com.google.firebase.database.Query;
 
 
 /**
- *
+ * This class is used to represent a shopping bag. Items can be added and
+ * removed from the bag and the bag can be emptied. For persistence, a
+ * Firebase DB is used.
  */
 public class ShoppingBag {
 
+    /*
+     * The shopping bag implemented with a FirebaseListAdapter.
+     */
     private FirebaseListAdapter<Product> adapter;
 
+    /*
+     * Top level reference to the Firebase DB.
+     */
     private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+
+    /*
+     * Shopping bag Firebase reference.
+     */
     private DatabaseReference mShoppingBagRef = mRootRef.child("bag");
 
     /**
-     *
+     * Initialize new Firebase shopping bag.
      */
     public ShoppingBag() {
         Query query = mRootRef.child("bag");
@@ -41,20 +53,77 @@ public class ShoppingBag {
         };
     }
 
-    public void addItemToBag(Product product) {
-        mShoppingBagRef.push().setValue(new Product(itemText, noOfItems));
+    /**
+     * @return The adapter used for the shopping bag.
+     */
+    public FirebaseListAdapter<Product> getShoppingBafAdapter()
+    {
+        return adapter;
     }
 
-    public void addItemToBag(String itemText, int quantity) {
+    /**
+     * Add product to the shopping bag.
+     *
+     * @param product
+     * @return true if successful, otherwise false.
+     */
+    public boolean addItemToBag(Product product) {
+        try {
+            mShoppingBagRef.push().setValue(product);
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Add product to the shopping bag.
+     *
+     * @param itemText
+     * @param quantity
+     * @return true if successful, otherwise false.
+     */
+    public boolean addItemToBag(String itemText, int quantity) {
         Product p = new Product(itemText, quantity);
-        addItemToBag(p);
+        return addItemToBag(p);
     }
 
-    public void clearItemFromBag(int bagPosition) {
+    /**
+     * Removes the item at itemPosition from the shopping bag.
+     *
+     * @param itemPosition
+     * @return true if successful, otherwise false.
+     */
+    public boolean removeItemFromBag(int itemPosition) {
+        boolean status = false;
 
+        try {
+            if (itemPosition >= 0 && itemPosition < adapter.getCount()) {
+                adapter.getRef(itemPosition).setValue(null);
+                status = true;
+            }
+        }
+        catch (Exception e) {
+            status = false;
+        }
+
+        return  status;
     }
 
-    public void clearBag() {
-
+    /**
+     * Remove all items from the shopping bag.
+     *
+     * @return true if successful, otherwise false.
+     */
+    public boolean clearBag() {
+        try {
+            mShoppingBagRef.removeValue();
+            adapter.notifyDataSetChanged();
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 }

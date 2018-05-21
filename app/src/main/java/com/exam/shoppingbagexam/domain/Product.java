@@ -1,8 +1,5 @@
 package com.exam.shoppingbagexam.domain;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * The product class is used to represent an item
  * in a shopping bag.
@@ -29,8 +26,8 @@ public class Product {
      */
     public Product(String name, int quantity​)
     {
-        this.name = name;
-        this.quantity​ = quantity​;
+        setName(name);
+        setQuantity​(quantity​);
     }
 
     /**
@@ -45,7 +42,7 @@ public class Product {
      * @param name
      */
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? "" : name;
     }
 
     /**
@@ -60,7 +57,7 @@ public class Product {
      * @param quantity​
      */
     public void setQuantity​(int quantity​) {
-        this.quantity​ = quantity​;
+        this.quantity​ =  quantity​ > 0 ? quantity​ : 0;
     }
 
     /**

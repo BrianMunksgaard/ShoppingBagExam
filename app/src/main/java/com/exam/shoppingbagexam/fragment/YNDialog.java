@@ -138,6 +138,24 @@ public class YNDialog extends DialogFragment {
     }
 
     /**
+     * Sets the handler for positive clicks.
+     *
+     * @param listener
+     */
+    public void setPositiveCallback(OnPositiveListener listener) {
+        pCallback = listener;
+    }
+
+    /**
+     * Sets the handler for negative clicks.
+     *
+     * @param listener
+     */
+    public void setNegativeCallback(OnNegativeListener listener) {
+        nCallback = listener;
+    }
+
+    /**
      * Set the title of the dialog.
      * @param dlgTitle
      */

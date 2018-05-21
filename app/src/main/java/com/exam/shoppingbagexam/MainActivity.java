@@ -13,19 +13,54 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.exam.shoppingbagexam.domain.Product;
+import com.exam.shoppingbagexam.domain.ShoppingBag;
 import com.exam.shoppingbagexam.fragment.YNDialog;
 import com.firebase.ui.database.FirebaseListAdapter;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, YNDialog.OnPositiveListener, YNDialog.OnNegativeListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     /*
      * The current context (this).
      */
     private Context context;
+
+    /*
+     * Reference to the shopping bag.
+     */
+    private ShoppingBag shoppingBag;
+
+    /*
+     * Reference to the ListView used to
+     * display the products in the bag.
+     */
+    private ListView listView;
+
+    /*
+     * The number of the currently checked item in
+     * the product list.
+     */
+    private int currentCheckedItem = -1;
+
+    /*
+     * A flag used to indicate whether or an item should really be removed from the bag.
+     */
+    private boolean reallyRemoveItem = true;
+
+    /*
+     * Items for the quantity spinner.
+     */
+    private String[] spinnerItems = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
     /**
      *
@@ -36,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         context = this;
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -48,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -56,6 +91,85 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        // Initialize shopping bag.
+        shoppingBag = new ShoppingBag();
+
+        // Setup list view and connect adapter.
+        listView = findViewById(R.id.list);
+        listView.setAdapter(shoppingBag.getShoppingBagAdapter());
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        setButtonEventHandlers();
+        setProductItemEventHandler();
+
+        // Put numbers 1-9 in the quantity spinner.
+        Spinner spinnerQuantity = findViewById(R.id.spinnerQuantity);
+        ArrayAdapter<String> spinnerQuantityAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, spinnerItems);
+        spinnerQuantity.setAdapter(spinnerQuantityAdapter);
+    }
+
+    /*
+     * Register event handlers for shopping bag buttons.
+     */
+    private void setButtonEventHandlers() {
+
+        findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addToBag_onClick(v);
+            }
+        });
+
+        findViewById(R.id.deleteItemButton).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                deleteItemFromBag_onClick(v);
+            }
+        });
+
+        findViewById(R.id.deleteAllButton).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                clearBag_onClick(v);
+            }
+        });
+
+    }
+
+    /*
+     * Set event handlers for product items.
+     */
+    private void setProductItemEventHandler() {
+
+        // Updates the currentCheckedItem whenever a product/item in
+        // the list is clicked.
+        ((ListView)findViewById(R.id.list)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                currentCheckedItem = i;
+            }
+        });
+    }
+
+    /**
+     * Tell shopping bag to listen for
+     * Firebase events.
+     */
+    @Override protected void onStart() {
+        super .onStart();
+        shoppingBag.getShoppingBagAdapter().startListening();
+    }
+
+    /**
+     * Tell shpping bag to stop listening for
+     * Firebase events.
+     */
+    @Override protected void onStop() {
+        shoppingBag.getShoppingBagAdapter().stopListening();
+        super .onStop();
     }
 
     @Override
@@ -116,26 +230,104 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Handle No/Negative clicks from the YNDialog.
+     * Add an item and the quantity to the shopping bag.
+     *
+     * @param view
      */
-    @Override
-    public void onNegativeClicked() {
-        Toast toast = Toast.makeText(context,
-                "negative button clicked", Toast.LENGTH_LONG);
-        toast.show();
+    public void addToBag_onClick(View view) {
+
+        // Get product item.
+        EditText itemRef = findViewById(R.id.item);
+        String itemText = itemRef.getText().toString();
+
+        // Only retrieve quantity if there is
+        // an item.
+        if(!itemText.isEmpty()) {
+
+            // Get quantity from spinner.
+            Spinner spinnerQuantity = findViewById(R.id.spinnerQuantity);
+            int quantityFromSpinner = spinnerQuantity.getSelectedItemPosition() + 1;
+
+            // Get quantity from edit text.
+            EditText quantityRef = findViewById(R.id.itemQuantity);
+            String quantityText = quantityRef.getText().toString();
+
+            // Determine the number of items.
+            int noOfItems = quantityFromSpinner;
+            if(!quantityText.isEmpty()) {
+                noOfItems = Integer.valueOf(quantityText);
+            }
+
+            // Add item and quantity to bag.
+            shoppingBag.addItemToBag(itemText, noOfItems);
+
+            // Reset input fields.
+            itemRef.getText().clear();
+            quantityRef.getText().clear();
+            spinnerQuantity.setSelection(0);
+        }
     }
 
     /**
-     * Handle Yes/Positive clicks from the YNDialog.
+     * Delete the currently selected item from the shopping bag.
+     * The user is presented with a snackbar allowing the delete
+     * operation to be cancelled.
+     *
+     * @param view
      */
-    @Override
-    public void onPositiveClicked() {
+    public void deleteItemFromBag_onClick(View view) {
 
-        Toast toast = Toast.makeText(context,
-                "positive button clicked", Toast.LENGTH_LONG);
-        toast.show();
+        // Get the name of the product we are about to delete.
+        final String productName = shoppingBag.getProduct(currentCheckedItem).getName();
 
-        //mShoppingBagRef.removeValue();
-        //adapter.notifyDataSetChanged();
+        // Hide the keyboard.
+        final View parent = findViewById(R.id.layout);
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(parent.getWindowToken(), 0);
+
+        // Use snackbar to confirm deletion.
+        reallyRemoveItem = true;
+        Snackbar snackbar = Snackbar
+                .make(parent, "Really remove " + productName + "!", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        reallyRemoveItem = false;
+                        Snackbar snackbar = Snackbar.make(parent, "Remove of " + productName + " cancelled!", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    }
+                });
+
+        snackbar.addCallback(new Snackbar.Callback() {
+
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                if (reallyRemoveItem) {
+                    shoppingBag.removeItemFromBag(currentCheckedItem);
+                }
+            }
+
+        });
+        snackbar.show();
+    }
+
+    /**
+     * Clear the shopping bag.
+     *
+     * @param view
+     */
+    public void clearBag_onClick(View view) {
+
+        // Use dialog to confirm clear bag.
+        YNDialog dialog = new YNDialog();
+        dialog.setPositiveCallback(new YNDialog.OnPositiveListener() {
+
+            @Override
+            public void onPositiveClicked() {
+                shoppingBag.clearBag();
+            }
+        });
+
+        dialog.show(getFragmentManager(), "YNFragment");
     }
 }

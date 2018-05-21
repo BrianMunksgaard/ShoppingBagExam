@@ -56,7 +56,7 @@ public class ShoppingBag {
     /**
      * @return The adapter used for the shopping bag.
      */
-    public FirebaseListAdapter<Product> getShoppingBafAdapter()
+    public FirebaseListAdapter<Product> getShoppingBagAdapter()
     {
         return adapter;
     }
@@ -125,5 +125,19 @@ public class ShoppingBag {
         catch (Exception e) {
             return false;
         }
+    }
+
+    /**
+     * Retrieves the product at the specified location.
+     *
+     * @param index
+     * @return
+     */
+    public Product getProduct(int index) {
+        Product p = null;
+        if (index >= 0 && index < adapter.getCount()) {
+            p = adapter.getItem(index);
+        }
+        return p;
     }
 }

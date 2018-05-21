@@ -10,10 +10,10 @@ import android.os.Bundle;
 import com.exam.shoppingbagexam.R;
 
 
-//You can pretty much reuse this class in your own project
-//if you want you can modify some of the text shown below.
-//of course if it was for a multilingual app you would put
-//the actual text that is now hardcoded inside the strings.xml file
+/**
+ * Generic Yes/No dialog. If dialog title and question is not
+ * set (using setters), default values are read from strings.xml.
+ */
 public class YNDialog extends DialogFragment {
 
     /*
@@ -99,7 +99,7 @@ public class YNDialog extends DialogFragment {
      * Button click handler for the positive/yes button. Simply calls the positiveClick()
      * method.
      */
-    DialogInterface.OnClickListener pListener = new DialogInterface.OnClickListener() {
+    private DialogInterface.OnClickListener pListener = new DialogInterface.OnClickListener() {
 
         @Override
         public void onClick(DialogInterface arg0, int arg1) {
@@ -111,7 +111,7 @@ public class YNDialog extends DialogFragment {
      * Button click handler for the negative/no button. Simply calls the negativeClick()
      * method.
      */
-    DialogInterface.OnClickListener nListener = new DialogInterface.OnClickListener() {
+    private DialogInterface.OnClickListener nListener = new DialogInterface.OnClickListener() {
 
         @Override
         public void onClick(DialogInterface arg0, int arg1) {

@@ -7,4 +7,10 @@
         android:summary="This is a summary"
         android:title="Fill on startup" />
 
+    <CheckBoxPreference
+        android:key="clearBagOnStartup"
+        android:defaultValue="false"
+        android:summary="This is a summary"
+        android:title="Clear shopping bag on startup" />
+
 </PreferenceScreen>

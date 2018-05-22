@@ -1,6 +1,7 @@
 package com.exam.shoppingbagexam;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -52,6 +53,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Items for the quantity spinner.
      */
     private String[] spinnerItems = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+
+    /*
+     * Return code from preferences.
+     */
+    private final int RESULT_CODE_PREFERENCES = 1;
 
     /**
      *
@@ -180,16 +186,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Handle action bar item clicks.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivityForResult(intent, RESULT_CODE_PREFERENCES);
+                break;
+
         }
 
         return super.onOptionsItemSelected(item);

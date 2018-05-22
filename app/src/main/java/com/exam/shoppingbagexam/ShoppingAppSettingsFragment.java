@@ -6,10 +6,10 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
-/**
- * Created by Jens Christian Rasch on 22-03-2018.
- */
 
+/**
+ *
+ */
 public class ShoppingAppSettingsFragment extends PreferenceFragment {
 
     private static String SETTINGS_AUTOFILLKEY = "autofill";

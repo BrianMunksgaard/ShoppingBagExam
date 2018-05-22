@@ -21,7 +21,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.exam.shoppingbagexam.domain.ShoppingBag;
-import com.exam.shoppingbagexam.utils.ConfirmationSnack;
+import com.exam.shoppingbagexam.utils.ConfirmCancelSnack;
 import com.exam.shoppingbagexam.utils.YNDialog;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,11 +47,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * the product list.
      */
     private int currentCheckedItem = -1;
-
-    /*
-     * A flag used to indicate whether or an item should really be removed from the bag.
-     */
-    private boolean reallyRemoveItem = true;
 
     /*
      * Items for the quantity spinner.
@@ -276,46 +271,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Get the name of the product we are about to delete.
         final String productName = shoppingBag.getProduct(currentCheckedItem).getName();
 
-        /*
         // Hide the keyboard.
-        final View parent = findViewById(R.id.layout);
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(parent.getWindowToken(), 0);
+        hideKeyboard(view);
 
-        // Use snackbar to confirm deletion.
-        reallyRemoveItem = true;
-        Snackbar snackbar = Snackbar
-                .make(parent, "Really remove " + productName + "!", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        reallyRemoveItem = false;
-                        Snackbar snackbar = Snackbar.make(parent, "Remove of " + productName + " cancelled!", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                    }
-                });
-
-        snackbar.addCallback(new Snackbar.Callback() {
-
-            @Override
-            public void onDismissed(Snackbar snackbar, int event) {
-                if (reallyRemoveItem) {
-                    shoppingBag.removeItemFromBag(currentCheckedItem);
-                }
-            }
-
-        });
-        snackbar.show();
-        */
+        // Show snack allowing user to cancel deletion.
+        String snackQuestionText = String.format("Really remove %s?", productName);
+        String snackCancelledText = String.format("Remove of %s cancelled!", productName);
         View parent = findViewById(R.id.layout);
-        ConfirmationSnack cs = new ConfirmationSnack();
-        cs.setConfirmCallback(new ConfirmationSnack.OnConfirmationListener() {
+        ConfirmCancelSnack.showSnack(parent, snackQuestionText, snackCancelledText, new ConfirmCancelSnack.OnConfirmListener() {
             @Override
             public void onConfirmed() {
                 shoppingBag.removeItemFromBag(currentCheckedItem);
             }
         });
-        cs.showSnack(parent, "Really remove " + productName + "!", "Remove of " + productName + " cancelled!");
     }
 
     /**
@@ -341,9 +309,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /*
      * Hide the keyboard.
      */
-    private void hideKeyboard(View parentView) {
-        final View parent = parentView;
+    private void hideKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(parent.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

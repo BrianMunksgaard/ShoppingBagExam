@@ -5,9 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 /**
- * Created by Jens Christian Rasch on 22-03-2018.
+ *
  */
-
 public class SettingsActivity extends Activity {
 
     @Override

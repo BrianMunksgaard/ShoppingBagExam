@@ -2,15 +2,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <CheckBoxPreference
-        android:key="autofill"
-        android:defaultValue="true"
-        android:summary="This is a summary"
-        android:title="Fill on startup" />
-
-    <CheckBoxPreference
         android:key="clearBagOnStartup"
         android:defaultValue="false"
-        android:summary="This is a summary"
-        android:title="Clear shopping bag on startup" />
+        android:summary="Whether or not to clear the shopping bag when the application starts."
+        android:title="Clear bag on startup" />
 
 </PreferenceScreen>

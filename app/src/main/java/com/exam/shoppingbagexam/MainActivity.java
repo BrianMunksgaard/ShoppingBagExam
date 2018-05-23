@@ -106,6 +106,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ArrayAdapter<String> spinnerQuantityAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, spinnerItems);
         spinnerQuantity.setAdapter(spinnerQuantityAdapter);
+
+        // Clear the bag if specified in settings.
+        if(ShoppingAppSettingsFragment.getClearBagOnStartup(context)) {
+            shoppingBag.clearBag();
+        }
     }
 
     /*
@@ -188,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * Handle action bar item clicks.
+     *
      * @param item
      * @return
      */

@@ -90,6 +90,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    /**
+     * Making sure that we store the currently shown fragment for rotation changes.
+     * @param outState
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -180,11 +184,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             title = getResources().getString(R.string.nav_shopping_list);
             currentFragmentId = id;
         } else if (id == R.id.nav_share) {
-//            fragment = new HomeFragment();
-//            title = getResources().getString(R.string.home);
+            // Not implemented yet
         } else if (id == R.id.nav_send) {
-//            fragment = new HomeFragment();
-//            title = getResources().getString(R.string.home);
+            // Not implemented yet
         }
 
         if (fragment != null) {

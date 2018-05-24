@@ -3,6 +3,7 @@ package com.exam.shoppingbagexam;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -59,6 +60,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private final int RESULT_CODE_PREFERENCES = 1;
 
+    /*
+     * Unique device id.
+     */
+    //private String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+
     /**
      *
      */
@@ -91,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         // Initialize shopping bag.
-        shoppingBag = new ShoppingBag();
+        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        shoppingBag = new ShoppingBag(deviceId);
 
         // Setup list view and connect adapter.
         listView = findViewById(R.id.list);

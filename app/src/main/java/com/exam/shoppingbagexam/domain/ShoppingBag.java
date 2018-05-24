@@ -17,6 +17,7 @@ import com.google.firebase.database.Query;
  */
 public class ShoppingBag {
 
+
     /*
      * The shopping bag implemented with a FirebaseListAdapter.
      */
@@ -30,14 +31,24 @@ public class ShoppingBag {
     /*
      * Shopping bag Firebase reference.
      */
-    private DatabaseReference mShoppingBagRef = mRootRef.child("bag");
+    private DatabaseReference mShoppingBagRef;
 
     /**
      * Initialize new Firebase shopping bag.
      */
-    public ShoppingBag() {
-        Query query = mRootRef.child("bag");
+    public ShoppingBag(String deviceId) {
 
+        // Reference to all bags collection.
+        DatabaseReference bagsRef = mRootRef.child("bags");
+
+        // Reference to current device.
+        DatabaseReference deviceRef = bagsRef.child(deviceId);
+
+        // Set the reference to the bag for the current device.
+        mShoppingBagRef = deviceRef.child("bag");
+
+        // Connect firebase and adapter.
+        Query query = deviceRef.child("bag");
         FirebaseListOptions<Product> options = new FirebaseListOptions.Builder<Product>()
                 .setQuery( query , Product. class )
                 .setLayout(android.R.layout. simple_list_item_checked )

@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private final int RESULT_CODE_PREFERENCES = 1;
 
+    private int currentFragmentId;
+
     /*
      * Unique device id.
      */
@@ -48,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
+
+        if (savedInstanceState != null) {
+            currentFragmentId = savedInstanceState.getInt("currentFragment");
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -65,14 +71,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // doing the fragment transaction here - replacing frame with HomeFragment -
         //which is the startup fragment in the app.
 
-        ShoppingListFragment fragment = new ShoppingListFragment();
-        fragment.setShoppingBag(shoppingBag);
+        Fragment fragment;
+        switch (currentFragmentId) {
+            case R.id.nav_about:
+                fragment = new AboutFragment();
+                break;
+            default:
+                fragment = new ShoppingListFragment();
+                ((ShoppingListFragment)fragment).setShoppingBag(shoppingBag);
+                currentFragmentId = R.id.nav_list;
+                break;
+        }
         fragmentTransaction.replace(R.id.frame, fragment);
         fragmentTransaction.commit(); //set starting fragment
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("currentFragment", currentFragmentId);
     }
 
     /**
@@ -152,10 +173,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Show the about fragment
             fragment = new AboutFragment();
             title = getResources().getString(R.string.nav_about);
+            currentFragmentId = id;
         } else if (id == R.id.nav_list) {
             fragment = new ShoppingListFragment();
             ((ShoppingListFragment)fragment).setShoppingBag(shoppingBag);
             title = getResources().getString(R.string.nav_shopping_list);
+            currentFragmentId = id;
         } else if (id == R.id.nav_share) {
 //            fragment = new HomeFragment();
 //            title = getResources().getString(R.string.home);

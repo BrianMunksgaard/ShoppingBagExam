@@ -1,6 +1,7 @@
 package com.exam.shoppingbagexam;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -21,5 +22,9 @@ public class ShoppingAppMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
         Log.d(TAG, "***" +  remoteMessage.getData().toString());
+
+        String message = String.format("%s says: '%s'.", remoteMessage.getFrom(), remoteMessage.getNotification().getBody());
+        Toast toast = Toast.makeText(this,message,Toast.LENGTH_LONG);
+        toast.show();
     }
 }

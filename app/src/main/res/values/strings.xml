@@ -17,4 +17,10 @@
     <string name="areYouSure">Are you sure?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="nav_about">About</string>
+    <string name="nav_shopping_list">Shopping list</string>
+
+    <string name="about_app_title">Awesome Shopping List App &#174;</string>
+    <string name="about_developers">by Brian Munksgaard &amp; Jens Christian Rasch</string>
+    <string name="about_date">&#169; 2018</string>
 </resources>

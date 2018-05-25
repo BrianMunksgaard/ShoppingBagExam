@@ -3,8 +3,10 @@ package com.exam.shoppingbagexam.domain;
 import android.view.View;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseArray;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
+import com.firebase.ui.database.ObservableSnapshotArray;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -16,7 +18,6 @@ import com.google.firebase.database.Query;
  * Firebase DB is used.
  */
 public class ShoppingBag {
-
 
     /*
      * The shopping bag implemented with a FirebaseListAdapter.
@@ -150,5 +151,10 @@ public class ShoppingBag {
             p = adapter.getItem(index);
         }
         return p;
+    }
+
+    public int getProductCount() {
+        return 0;
+
     }
 }

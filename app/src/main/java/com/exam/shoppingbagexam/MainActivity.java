@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
+        ShoppingAppMessagingService.setContext(context);
 
         if (savedInstanceState != null) {
             currentFragmentId = savedInstanceState.getInt("currentFragment");

@@ -1,5 +1,6 @@
 package com.exam.shoppingbagexam;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,6 +14,13 @@ public class ShoppingAppMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "FCM Service";
 
+    private static Context _context;
+
+
+    public static void setContext(Context context) {
+        _context = context;
+    }
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // TODO: Handle FCM messages here.
@@ -23,8 +31,9 @@ public class ShoppingAppMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
         Log.d(TAG, "***" +  remoteMessage.getData().toString());
 
-        String message = String.format("%s says: '%s'.", remoteMessage.getFrom(), remoteMessage.getNotification().getBody());
-        Toast toast = Toast.makeText(this,message,Toast.LENGTH_LONG);
+        //String message = String.format("%s says: '%s'.", remoteMessage.getFrom(), remoteMessage.getNotification().getBody());
+        String message = "kurt";
+        Toast toast = Toast.makeText(_context, message,Toast.LENGTH_LONG);
         toast.show();
     }
 }

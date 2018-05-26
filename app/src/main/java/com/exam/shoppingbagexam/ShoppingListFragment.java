@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.exam.shoppingbagexam.domain.Product;
 import com.exam.shoppingbagexam.domain.ShoppingBag;
 import com.exam.shoppingbagexam.utils.ConfirmCancelSnack;
 import com.exam.shoppingbagexam.utils.YNDialog;
@@ -137,6 +138,8 @@ public class ShoppingListFragment extends Fragment {
      * @param view
      */
     public void addToBag_onClick(View view) {
+        // Hide the keyboard.
+        hideKeyboard(view);
 
         // Get product item.
         EditText itemRef = thisView.findViewById(R.id.item);
@@ -150,22 +153,14 @@ public class ShoppingListFragment extends Fragment {
             Spinner spinnerQuantity = thisView.findViewById(R.id.spinnerQuantity);
             int quantityFromSpinner = spinnerQuantity.getSelectedItemPosition() + 1;
 
-            // Get quantity from edit text.
-            EditText quantityRef = thisView.findViewById(R.id.itemQuantity);
-            String quantityText = quantityRef.getText().toString();
-
             // Determine the number of items.
             int noOfItems = quantityFromSpinner;
-            if(!quantityText.isEmpty()) {
-                noOfItems = Integer.valueOf(quantityText);
-            }
 
             // Add item and quantity to bag.
             shoppingBag.addItemToBag(itemText, noOfItems);
 
             // Reset input fields.
             itemRef.getText().clear();
-            quantityRef.getText().clear();
             spinnerQuantity.setSelection(0);
         }
     }
@@ -179,22 +174,25 @@ public class ShoppingListFragment extends Fragment {
      */
     public void deleteItemFromBag_onClick(View view) {
 
-        // Get the name of the product we are about to delete.
-        final String productName = shoppingBag.getProduct(currentCheckedItem).getName();
+        Product productToDelete = shoppingBag.getProduct(currentCheckedItem);
+        if (productToDelete != null) {
+            // Get the name of the product we are about to delete.
+            final String productName = productToDelete.getName();
 
-        // Hide the keyboard.
-        hideKeyboard(view);
+            // Hide the keyboard.
+            hideKeyboard(view);
 
-        // Show snack allowing user to cancel deletion.
-        String snackQuestionText = String.format("Really remove %s?", productName);
-        String snackCancelledText = String.format("Remove of %s cancelled!", productName);
-        View parent = thisView.findViewById(R.id.layout);
-        ConfirmCancelSnack.showSnack(parent, snackQuestionText, snackCancelledText, new ConfirmCancelSnack.OnConfirmListener() {
-            @Override
-            public void onConfirmed() {
-                shoppingBag.removeItemFromBag(currentCheckedItem);
-            }
-        });
+            // Show snack allowing user to cancel deletion.
+            String snackQuestionText = String.format("Really remove %s?", productName);
+            String snackCancelledText = String.format("Remove of %s cancelled!", productName);
+            View parent = thisView.findViewById(R.id.layout);
+            ConfirmCancelSnack.showSnack(parent, snackQuestionText, snackCancelledText, new ConfirmCancelSnack.OnConfirmListener() {
+                @Override
+                public void onConfirmed() {
+                    shoppingBag.removeItemFromBag(currentCheckedItem);
+                }
+            });
+        }
     }
 
     /**

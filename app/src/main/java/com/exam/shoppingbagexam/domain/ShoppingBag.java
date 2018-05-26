@@ -155,6 +155,17 @@ public class ShoppingBag {
 
     public int getProductCount() {
         return 0;
+    }
 
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < adapter.getCount(); i++) {
+            Product p = adapter.getItem(i);
+            sb.append(p.getQuantity() + " " + p.getName() + "\n");
+        }
+
+        return sb.toString();
     }
 }

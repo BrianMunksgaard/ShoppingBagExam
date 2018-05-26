@@ -185,9 +185,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             title = getResources().getString(R.string.nav_shopping_list);
             currentFragmentId = id;
         } else if (id == R.id.nav_share) {
-            // Not implemented yet
-        } else if (id == R.id.nav_send) {
-            // Not implemented yet
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "ShoppingList");
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, shoppingBag.toString());
+            startActivity(Intent.createChooser(sharingIntent, "Share shoppinglist"));
         }
 
         if (fragment != null) {

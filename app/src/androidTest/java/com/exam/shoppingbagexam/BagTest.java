@@ -1,9 +1,6 @@
 package com.exam.shoppingbagexam;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-
 
 import com.exam.shoppingbagexam.domain.Product;
 import com.exam.shoppingbagexam.domain.ShoppingBag;

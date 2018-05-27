@@ -168,7 +168,7 @@ public class ShoppingBag {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < adapter.getCount(); i++) {
             Product p = adapter.getItem(i);
-            sb.append(p.getQuantity() + " " + p.getName() + "\n");
+            sb.append(p.toString() + "\n");
         }
 
         return sb.toString();

@@ -18,8 +18,12 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.exam.shoppingbagexam.domain.ShoppingBag;
-import com.exam.shoppingbagexam.utils.YNDialog;
 
+
+/**
+ * The main function of the main activity is to handle intial setup and
+ * the application navigation (loading the correct fragments).
+ */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     /*
@@ -43,13 +47,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private int currentFragmentId;
 
-    /*
-     * Unique device id.
-     */
-    //private String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-
     /**
-     *
+     * Peform application initialization and handle startup.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

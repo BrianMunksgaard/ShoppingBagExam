@@ -3,6 +3,12 @@ package com.exam.shoppingbagexam.utils;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+/**
+ * Used this class to display confirmation snacks with
+ * undo option. If listeners are registered they will
+ * receive relevant callback depending on
+ * what the user action.
+ */
 public class ConfirmCancelSnack {
 
     /*

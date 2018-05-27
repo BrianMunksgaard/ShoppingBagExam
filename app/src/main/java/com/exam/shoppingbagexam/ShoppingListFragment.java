@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.crashlytics.android.Crashlytics;
 import com.exam.shoppingbagexam.domain.Product;
 import com.exam.shoppingbagexam.domain.ShoppingBag;
 import com.exam.shoppingbagexam.utils.ConfirmCancelSnack;
@@ -144,6 +145,9 @@ public class ShoppingListFragment extends Fragment {
         // Get product item.
         EditText itemRef = thisView.findViewById(R.id.item);
         String itemText = itemRef.getText().toString();
+
+        // TODO: Comment in for testing crashes
+        //Crashlytics.getInstance().crash();
 
         // Only retrieve quantity if there is
         // an item.

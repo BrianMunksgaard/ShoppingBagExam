@@ -171,6 +171,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handle the action when users click on items in the navigation drawer.
+     * This method will make sure the correct fragment is shown corresponding to the item being
+     * clicked.
+     *
+     * @param item
+     * @return
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -188,27 +196,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String title= "";
 
         int id = item.getItemId();
-
-        if (id == R.id.nav_about) {
-            // Show the about fragment
-            fragment = new AboutFragment();
-            title = getResources().getString(R.string.nav_about);
-            currentFragmentId = id;
-        } else if (id == R.id.nav_list) {
-            fragment = new ShoppingListFragment();
-            ((ShoppingListFragment)fragment).setShoppingBag(shoppingBag);
-            title = getResources().getString(R.string.nav_shopping_list);
-            currentFragmentId = id;
-        } else if (id == R.id.nav_share) {
-            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-            sharingIntent.setType("text/plain");
-            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "ShoppingList");
-            sharingIntent.putExtra(Intent.EXTRA_TEXT, shoppingBag.toString());
-            startActivity(Intent.createChooser(sharingIntent, "Share shoppinglist"));
-        } else if (id == R.id.nav_crash) {
-            Crashlytics.getInstance().crash();
+        switch (id) {
+            case R.id.nav_about:
+                // Show the about fragment
+                fragment = new AboutFragment();
+                title = getResources().getString(R.string.nav_about);
+                currentFragmentId = id;
+                break;
+            case R.id.nav_list:
+                // Show the shopping bag list
+                fragment = new ShoppingListFragment();
+                ((ShoppingListFragment)fragment).setShoppingBag(shoppingBag);
+                title = getResources().getString(R.string.nav_shopping_list);
+                currentFragmentId = id;
+                break;
+            case R.id.nav_share:
+                // Share the shopping bag through an implicit intent
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "ShoppingList");
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, shoppingBag.toString());
+                startActivity(Intent.createChooser(sharingIntent, "Share shoppinglist"));
+                break;
+            case R.id.nav_crash:
+                // Force a crash of the app
+                Crashlytics.getInstance().crash();
+                break;
         }
 
+        // Show the correct fragment if needed
         if (fragment != null) {
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame, fragment);
@@ -220,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
     /**
      * Clear the shopping bag.
@@ -241,5 +256,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         dialog.show(getFragmentManager(), "YNFragment");
     }
-
 }

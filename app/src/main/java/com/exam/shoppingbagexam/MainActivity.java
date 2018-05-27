@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private final int RESULT_CODE_PREFERENCES = 1;
 
+    /**
+     * The id for the fragment that is currently being shown. This is used for making sure that the
+     * same fragment is shown if the application changes rotation.
+     */
     private int currentFragmentId;
 
     /*

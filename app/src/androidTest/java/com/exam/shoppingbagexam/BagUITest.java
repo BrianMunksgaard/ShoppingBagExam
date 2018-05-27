@@ -1,19 +1,11 @@
 package com.exam.shoppingbagexam;
 
-import android.content.Context;
-import android.provider.Settings;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.espresso.Espresso;
 
-import com.exam.shoppingbagexam.domain.Product;
-import com.exam.shoppingbagexam.domain.ShoppingBag;
-
-import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

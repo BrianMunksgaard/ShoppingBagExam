@@ -47,12 +47,35 @@ public class ShoppingListFragment extends Fragment {
      */
     private String[] spinnerItems = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
+    /**
+     * Reference to the view that is being created as part of this fragment.
+     * Is used throughout the fragment to set up event handlers and find references to
+     * objects in this view.
+     */
     private View thisView;
 
+    /**
+     * A reference to the ShoppingBag object for the fragment to be able to maintain information
+     * in the ShoppingBag.
+     * @param shoppingBag
+     */
     public void setShoppingBag(ShoppingBag shoppingBag) {
         this.shoppingBag = shoppingBag;
     }
 
+    /**
+     * This method will be called during the creation of the fragment.
+     * It will handle the setup of relevant event handlers as well as the connection between the
+     * ShoppingBag adapter and the ListView shown to the user.
+     *
+     * It also initializes the spinner values as well as clears the content of the shopping bag,
+     * if the application setting is set to do so.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //This corresponds to the onCreate that we have in our

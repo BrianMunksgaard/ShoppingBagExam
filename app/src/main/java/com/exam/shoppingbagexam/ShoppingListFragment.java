@@ -1,5 +1,6 @@
 package com.exam.shoppingbagexam;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.exam.shoppingbagexam.domain.Product;
@@ -63,7 +65,6 @@ public class ShoppingListFragment extends Fragment {
         setRetainInstance(true);
 
         thisView = inflater.inflate(R.layout.fragment_shopping_list, container, false);
-
         context = thisView.getContext();
 
         // Setup list view and connect adapter.

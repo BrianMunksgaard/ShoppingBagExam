@@ -1,39 +1,47 @@
 package com.exam.shoppingbagexam;
 
-import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 /**
- *
+ * Handles messages from Firebase Cloud Messaging.
  */
 public class ShoppingAppMessagingService extends FirebaseMessagingService {
 
-    private static final String TAG = "FCM Service";
+    /*
+     * Call back reference used when messages are received.
+     */
+    private static OnCloudMessageReceivedListener onCloudMessageReceivedCallback = null;
 
-    private static Context _context;
-
-
-    public static void setContext(Context context) {
-        _context = context;
+    /**
+     * Define interface to implement messages
+     * should be handled elsewhere.
+     */
+    public interface OnCloudMessageReceivedListener {
+        void onCloudMessageReceived(String msg);
     }
 
+    /**
+     * Set the callback reference in order to receive and handle
+     * messages elsewhere.
+     *
+     * @param callback
+     */
+    public static void setOnCloudMessageReceivedCallback(OnCloudMessageReceivedListener callback) {
+        onCloudMessageReceivedCallback = callback;
+    }
+
+    /**
+     * Handle messages from Firebase. Generates a new message
+     * and invokes the OnCloudMessageReceivedListener.
+     *
+     * @param remoteMessage
+     */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // TODO: Handle FCM messages here.
-        // If the application is in the foreground handle both data and notification messages here.
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated.
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
-        Log.d(TAG, "***" +  remoteMessage.getData().toString());
-
-        //String message = String.format("%s says: '%s'.", remoteMessage.getFrom(), remoteMessage.getNotification().getBody());
-        String message = "kurt";
-        Toast toast = Toast.makeText(_context, message,Toast.LENGTH_LONG);
-        toast.show();
+        String message = String.format("%s says: '%s'.", remoteMessage.getFrom(), remoteMessage.getNotification().getBody());
+        if (onCloudMessageReceivedCallback != null) {
+            onCloudMessageReceivedCallback.onCloudMessageReceived(message);
+        }
     }
 }

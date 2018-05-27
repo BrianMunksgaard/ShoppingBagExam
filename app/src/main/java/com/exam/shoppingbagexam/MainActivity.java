@@ -1,5 +1,6 @@
 package com.exam.shoppingbagexam;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.exam.shoppingbagexam.domain.ShoppingBag;
 import com.exam.shoppingbagexam.utils.YNDialog;
@@ -50,7 +52,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
-        ShoppingAppMessagingService.setContext(context);
+
+        // Display messages from Firebase in a toast.
+        ShoppingAppMessagingService.setOnCloudMessageReceivedCallback(new ShoppingAppMessagingService.OnCloudMessageReceivedListener() {
+            @Override
+            public void onCloudMessageReceived(final String msg) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                });
+            }
+        });
 
         if (savedInstanceState != null) {
             currentFragmentId = savedInstanceState.getInt("currentFragment");

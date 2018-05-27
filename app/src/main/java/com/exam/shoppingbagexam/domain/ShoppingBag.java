@@ -153,8 +153,13 @@ public class ShoppingBag {
         return p;
     }
 
+    /**
+     * The number of products in the bag.
+     *
+     * @return
+     */
     public int getProductCount() {
-        return 0;
+        return adapter == null ? 0 : adapter.getCount();
     }
 
     @Override

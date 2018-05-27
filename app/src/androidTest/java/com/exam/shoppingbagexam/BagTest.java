@@ -3,6 +3,8 @@ package com.exam.shoppingbagexam;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
+import android.widget.ListView;
 
 import com.exam.shoppingbagexam.domain.Product;
 import com.exam.shoppingbagexam.domain.ShoppingBag;
@@ -14,58 +16,68 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Instrumented test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * Test shopping bag functionality.
  */
 @RunWith(AndroidJUnit4.class)
 public class BagTest {
 
+    /**
+     * Test shopping bag CRUD functions.
+     */
     @Test
     public void testShoppingBagCRUD() {
         // Context of the app under test.
-        //Context appContext = InstrumentationRegistry.getTargetContext();
+        // Context appContext = InstrumentationRegistry.getTargetContext();
+        ShoppingBag shoppingBag = null;
 
-        //assertEquals("com.exam.shoppingbagexam", appContext.getPackageName());
+        try {
 
+            // Start listening.
+            shoppingBag = new ShoppingBag("unitTest");
+            shoppingBag.getShoppingBagAdapter().startListening();
 
-        // Create.
-        {
-            ShoppingBag shoppingBag = new ShoppingBag("unitTest");
+            // Start with an empty bag.
+            shoppingBag.clearBag();
+            Thread.sleep(2000);
+            assertEquals(0, shoppingBag.getProductCount());
 
+            // Create.
             assertTrue(shoppingBag.addItemToBag("BMW 530d", 2));
             assertTrue(shoppingBag.addItemToBag("Audi A6", 1));
-            assertEquals(2, shoppingBag.getProductCount());
-        }
 
-        // Read.
-        {
-            ShoppingBag shoppingBag = new ShoppingBag("unitTest");
+            Thread.sleep(2000);
             assertEquals(2, shoppingBag.getProductCount());
 
+            // Read.
             Product p = shoppingBag.getProduct(1);
             assertEquals("Audi A6", p.getName());
             assertEquals(1, p.getQuantity());
-        }
 
-
-        // Update.
-        {
-            ShoppingBag shoppingBag = new ShoppingBag("unitTest");
-            assertEquals(2, shoppingBag.getProductCount());
-
+            // Update.
             shoppingBag.removeItemFromBag(0);
+            Thread.sleep(2000);
+            assertEquals(1, shoppingBag.getProductCount());
 
-            Product p = shoppingBag.getProduct(0);
+            p = shoppingBag.getProduct(0);
             assertEquals("Audi A6", p.getName());
             assertEquals(1, p.getQuantity());
+
+            // Delete.
+            shoppingBag.clearBag();
+            Thread.sleep(2000);
+            assertEquals(0, shoppingBag.getProductCount());
+
         }
 
-        // Delete.
-        {
-            ShoppingBag shoppingBag = new ShoppingBag("unitTest");
-            shoppingBag.clearBag();
-            assertEquals(0, shoppingBag.getProductCount());
+        catch (Exception e) {
+
+        }
+
+        finally {
+            // Stop listening.
+            if( shoppingBag != null) {
+                shoppingBag.getShoppingBagAdapter().stopListening();
+            }
         }
     }
 }

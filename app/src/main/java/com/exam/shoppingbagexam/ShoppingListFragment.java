@@ -53,8 +53,6 @@ public class ShoppingListFragment extends Fragment {
         this.shoppingBag = shoppingBag;
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //This corresponds to the onCreate that we have in our
@@ -143,9 +141,6 @@ public class ShoppingListFragment extends Fragment {
         // Get product item.
         EditText itemRef = thisView.findViewById(R.id.item);
         String itemText = itemRef.getText().toString();
-
-        // TODO: Comment in for testing crashes
-        //Crashlytics.getInstance().crash();
 
         // Only retrieve quantity if there is
         // an item.

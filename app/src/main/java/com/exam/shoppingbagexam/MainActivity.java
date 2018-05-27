@@ -1,6 +1,5 @@
 package com.exam.shoppingbagexam;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.exam.shoppingbagexam.domain.ShoppingBag;
 import com.exam.shoppingbagexam.utils.YNDialog;
 
@@ -205,6 +205,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "ShoppingList");
             sharingIntent.putExtra(Intent.EXTRA_TEXT, shoppingBag.toString());
             startActivity(Intent.createChooser(sharingIntent, "Share shoppinglist"));
+        } else if (id == R.id.nav_crash) {
+            Crashlytics.getInstance().crash();
         }
 
         if (fragment != null) {

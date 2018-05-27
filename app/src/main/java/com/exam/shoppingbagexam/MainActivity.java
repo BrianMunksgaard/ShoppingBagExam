@@ -236,24 +236,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    /**
-     * Clear the shopping bag.
-     *
-     * @param view
-     */
-    public void clearBag_onClick(View view) {
-
-        // Use dialog to confirm clear bag.
-        YNDialog dialog = new YNDialog();
-        dialog.setPositiveCallback(new YNDialog.OnPositiveListener() {
-
-            @Override
-            public void onPositiveClicked() {
-                shoppingBag.clearBag();
-            }
-        });
-
-        dialog.show(getFragmentManager(), "YNFragment");
-    }
 }
